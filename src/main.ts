@@ -5,6 +5,18 @@ const io = require('@actions/io');
 const cp = require('child_process');
 const fs = require('fs');
 
+function strToBool(str: string): boolean {
+  switch (str.toLowerCase()) {
+    case 'true':
+    case '1':
+    case 'on':
+    case 'yes':
+      return true;
+    default:
+      return false;
+  }
+}
+
 async function run() {
   try {
 
@@ -19,7 +31,7 @@ async function run() {
     // get inputs from workflow
     // specFile name
     const specFile = core.getInput('spec_file');
-    const useSourcesFromRepo = core.getInput('use_sources_from_repo');
+    const useSourcesFromRepo = strToBool(core.getInput('use_sources_from_repo'));
 
     // Read spec file and get values 
     var data = fs.readFileSync(specFile, 'utf8');

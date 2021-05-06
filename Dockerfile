@@ -12,10 +12,10 @@ RUN set -xe \
 
 # Setting up node to run our JS file
 # Download Node Linux binary
-ARG NODEJS_VERSION=v14.16.1
+ARG NODEJS_VERSION=v12.22.1
 RUN set -xe \
     && curl -o node.tar.gz https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-linux-x64.tar.xz \
-    && test $(sha256sum node.tar.gz | awk '{print $1}') = '85a89d2f68855282c87851c882d4c4bbea4cd7f888f603722f0240a6e53d89df' \
+    && test $(sha256sum node.tar.gz | awk '{print $1}') = '8b537282c222ae4a40e019a52f769ca27b6640699bdde1510375e8d72da7d041' \
     && tar --strip-components 1 -xvf node.tar.gz -C /usr/local \
     && rm node.tar.gz
 

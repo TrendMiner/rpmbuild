@@ -1,9 +1,18 @@
 # Using CentOS 7 as base image to support rpmbuild (packages will be Dist el7)
-FROM centos:7
+FROM docker.io/library/node:14.16.1-alpine3.13 AS builder
+
+WORKDIR /build
+COPY ./src/ ./src
+COPY package.json package-lock.json tsconfig.json ./
+
+RUN set -xe \
+    && npm install \
+    && npm run build
+
+FROM docker.io/library/centos:7
 
 # Copying all contents of rpmbuild repo inside container
 WORKDIR /app
-COPY . /app
 
 # Installing tools needed for rpmbuild , 
 # depends on BuildRequires field in specfile, (TODO: take as input & install)
@@ -20,8 +29,11 @@ RUN set -xe \
     && rm node.tar.gz
 
 # Install all dependecies to execute main.js
+COPY package.json package-lock.json ./
 RUN set -xe \
     && npm install --production
+
+COPY --from=builder /build/lib/ ./lib
 
 # All remaining logic goes inside main.js , 
 # where we have access to both tools of this container and 

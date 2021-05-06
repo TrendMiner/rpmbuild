@@ -74,6 +74,7 @@ async function run() {
 
     // Execute rpmbuild , -ba generates both RPMS and SPRMS
     try {
+      await exec.exec(`yum-builddep -y ${specFile}`);
       await exec.exec(`rpmbuild -ba /github/home/rpmbuild/SPECS/${specFile}`);
     } catch (err) {
       core.setFailed(`action failed with error: ${err}`);
